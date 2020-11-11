@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Keskustelupalsta</title>
+        <meta charset="UTF-8"/>
+    </head>
+    <body>
+        <h2>{{ topic[1] }}</h2>
+        <hr>
+        {% for message in messages %}
+            <p>{{ message[1] }}</p>
+            <p>Lähetetty: {{ message[2].strftime("%Y-%m-%d %H:%M:%S") }}</p>
+            <hr>
+        {% endfor %}
+        <form action="/topic/{{ topic[0] }}/send" method="POST">
+            Kirjoita viesti:<br>
+            <textarea name="content" rows="5" cols="40"></textarea><br>
+            <input type="submit" value="Lähetä">
+        </form>
+        <br>
+        <a href="/">Takaisin etusivulle</a>
+    </body>
+</html>

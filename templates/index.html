@@ -5,13 +5,12 @@
         <meta charset="UTF-8"/>
     </head>
     <body>
-        <h1>Viestit</h1>
+        <h1>Keskustelut</h1>
         <hr>
-        {% for message in messages %}
-        <p>{{ message[0] }}</p>
-        <p>Lähetetty: {{ message[1].strftime("%Y-%m-%d %H:%M:%S") }}</p>
-        <hr>
+        {% for topic in topics %}
+            <a href="/topic/{{ topic[0] }}">{{ topic[1] }}</a>
+            <hr>
         {% endfor %}
-        <a href="/new">Lähetä viesti</a>
+        <a href="/new">Uusi aihe</a>
     </body>
 </html>
