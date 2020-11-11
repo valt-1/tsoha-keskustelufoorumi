@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Keskustelupalsta</title>
+        <meta charset="UTF-8"/>
+    </head>
+    <body>
+        <h1>Viestit</h1>
+        <hr>
+        {% for message in messages %}
+        {{ message[0] }}
+        <hr>
+        {% endfor %}
+        <a href="/new">Lähetä viesti</a>
+    </body>
+</html>
