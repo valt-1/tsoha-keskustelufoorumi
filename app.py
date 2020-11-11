@@ -9,7 +9,7 @@ db = SQLAlchemy(app)
 
 @app.route("/")
 def index():
-    result = db.session.execute("SELECT content FROM messages")
+    result = db.session.execute("SELECT content, sent_at FROM messages")
     messages = result.fetchall()
     return render_template("index.html", messages=messages)
 
@@ -20,7 +20,7 @@ def new():
 @app.route("/sendmessage", methods=["POST"])
 def sendmessage():
     content = request.form["content"]
-    sql = "INSERT INTO messages (content) VALUES (:content)"
+    sql = "INSERT INTO messages (content, sent_at) VALUES (:content, NOW())"
     db.session.execute(sql, {"content":content})
     db.session.commit()
     return redirect("/")

@@ -8,7 +8,8 @@
         <h1>Viestit</h1>
         <hr>
         {% for message in messages %}
-        {{ message[0] }}
+        <p>{{ message[0] }}</p>
+        <p>Lähetetty: {{ message[1].strftime("%Y-%m-%d %H:%M:%S") }}</p>
         <hr>
         {% endfor %}
         <a href="/new">Lähetä viesti</a>
