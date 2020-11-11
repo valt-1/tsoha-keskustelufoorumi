@@ -13,3 +13,9 @@ viestien poisto- ja muokkausoikeudet.
 
 Viestiketjuja voi selailla aihealueiden mukaan, ja lisäksi viestejä voi 
 hakea esimerkiksi viestin sisällön tai lähettäjän perusteella.
+
+[Sovellus Herokussa](https://peaceful-castle-52118.herokuapp.com/)
+
+Toteutettu:
+- uuden viestiketjun aloittaminen
+- viestin lisääminen keskusteluun
