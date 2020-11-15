@@ -1,8 +1,13 @@
 from db import db
 
 def send(content, topic_id):
-    sql = "INSERT INTO messages (content, sent_at, topic_id) VALUES (:content, NOW(), :topic_id)"
+    sql = "INSERT INTO messages (content, sent_at, visible, topic_id) VALUES (:content, NOW(), 1, :topic_id)"
     db.session.execute(sql, {"content":content, "topic_id":topic_id})
+    db.session.commit()
+
+def remove(id):
+    sql = "UPDATE messages SET visible=0 WHERE id=:id"
+    db.session.execute(sql, {"id":id})
     db.session.commit()
 
 def get_all():
@@ -11,6 +16,6 @@ def get_all():
     return messages
 
 def get_by_topic(id):
-    sql = "SELECT * FROM messages WHERE topic_id=:topic_id"
+    sql = "SELECT * FROM messages WHERE topic_id=:topic_id AND visible=1"
     result = db.session.execute(sql, {"topic_id":id})
     return result.fetchall()

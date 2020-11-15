@@ -17,7 +17,7 @@ def createtopic():
     subject = request.form["subject"]
     message = request.form["content"]
     topics.create(subject, message)
-    return redirect("/")
+    return redirect("/") # TODO: fix redirect
 
 @app.route("/topic/<int:id>")
 def topic(id):
@@ -29,4 +29,9 @@ def topic(id):
 def send(topic_id):
     content = request.form["content"]
     messages.send(content, topic_id)
+    return redirect("/topic/"+str(topic_id))
+
+@app.route("/<int:topic_id>/deletemessage/<int:message_id>", methods=["POST"])
+def deletemessage(topic_id, message_id):
+    messages.remove(message_id)
     return redirect("/topic/"+str(topic_id))

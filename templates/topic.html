@@ -9,7 +9,12 @@
         <hr>
         {% for message in messages %}
             <p>{{ message[1] }}</p>
-            <p>Lähetetty: {{ message[2].strftime("%Y-%m-%d %H:%M:%S") }}</p>
+            <p>
+                Lähetetty: {{ message[2].strftime("%Y-%m-%d %H:%M:%S") }}
+                <form action="/{{ topic[0] }}/deletemessage/{{ message[0] }}" method="POST">
+                    <input type="submit" value="Poista">
+                </form>
+            </p>
             <hr>
         {% endfor %}
         <form action="/topic/{{ topic[0] }}/send" method="POST">
