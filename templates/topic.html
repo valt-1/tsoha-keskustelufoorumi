@@ -11,17 +11,23 @@
             <p>{{ message[1] }}</p>
             <p>
                 Lähetetty: {{ message[2].strftime("%Y-%m-%d %H:%M:%S") }}
+                {% if user_id == message[5] %}
                 <form action="/{{ topic[0] }}/deletemessage/{{ message[0] }}" method="POST">
                     <input type="submit" value="Poista">
                 </form>
+                {% endif %}
             </p>
             <hr>
         {% endfor %}
+        {% if session.username %}
         <form action="/topic/{{ topic[0] }}/send" method="POST">
             Kirjoita viesti:<br>
-            <textarea name="content" rows="5" cols="40"></textarea><br>
+            <textarea name="content" rows="10" cols="80"></textarea><br>
             <input type="submit" value="Lähetä">
         </form>
+        {% else %}
+        <p>Kirjaudu sisään vastataksesi keskusteluun</p>
+        {% endif %}
         <br>
         <a href="/">Takaisin etusivulle</a>
     </body>

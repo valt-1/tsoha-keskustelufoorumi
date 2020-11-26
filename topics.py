@@ -1,13 +1,12 @@
 from db import db
 import messages
 
-def create(subject, message):
-    sql = "INSERT INTO topics (subject) VALUES (:subject)"
-    db.session.execute(sql, {"subject":subject})
-    sql = "SELECT id FROM topics WHERE subject=:subject"
-    result = db.session.execute(sql, {"subject":subject})
-    topic_id = result.fetchone()[0]
-    messages.send(message, topic_id)
+def create(subject, message, user_id):
+    sql = "INSERT INTO topics (subject, user_id) VALUES (:subject, :user_id)"
+    db.session.execute(sql, {"subject":subject, "user_id":user_id})
+    db.session.commit()
+    topic_id = db.session.execute("SELECT MAX(id) FROM topics").fetchone()[0]
+    messages.send(message, topic_id, user_id)
 
 def find_all():
     result = db.session.execute("SELECT * FROM topics")
