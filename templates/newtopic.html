@@ -1,18 +1,18 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>Keskustelupalsta</title>
-        <meta charset="UTF-8"/>
-    </head>
-    <body>
-        <form action="/createtopic" method="POST">
-            Aihe:<br>
-            <textarea name="subject" rows="1" cols="80"></textarea><br>
-            Kirjoita viesti:<br>
-            <textarea name="content" rows="10" cols="80"></textarea><br>
-            <input type="submit" value="Lähetä">
-        </form>
-        <br>
-        <a href="/">Takaisin etusivulle</a>
-    </body>
-</html>
+{% extends "layout.html" %}
+{% block title %}Uusi Aihe{% endblock %}
+{% block content %}
+    {% if session.username %}
+    <p>Olet kirjautunut nimellä {{ session.username }}</p>
+    <a href="/logout">Kirjaudu ulos</a>
+    {% endif %}
+    <h2>Uusi aihe</h2>
+    <form action="/createtopic" method="POST">
+        Otsikko:<br>
+        <textarea name="subject" rows="1" cols="80"></textarea><br>
+        Kirjoita viesti:<br>
+        <textarea name="content" rows="10" cols="80"></textarea><br>
+        <input type="submit" value="Lähetä">
+    </form>
+    <br>
+    <a href="/">Takaisin etusivulle</a>
+{% endblock %}

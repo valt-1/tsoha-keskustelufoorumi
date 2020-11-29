@@ -1,39 +1,39 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>Keskustelupalsta</title>
-        <meta charset="UTF-8"/>
-    </head>
-    <body>
-        <h2>{{ topic[1] }}</h2>
-        <hr>
-        {% for message in messages %}
-        {% if message[0] == 0 %}
-        <p><em>Viesti poistettu</em></p>
-        {% else %}
-        <p>
-            <p>{{ message[2] }}</p>
-            Lähettäjä: {{ message[1] }}<br>
-            Lähetetty: {{ message[3].strftime("%Y-%m-%d %H:%M:%S") }}<br>
-            {% if user_id == message[4] %}
-            <form action="/{{ topic[0] }}/deletemessage/{{ message[5] }}" method="POST">
-                <input type="submit" value="Poista">
-            </form>
-            {% endif %}
-        </p>
-        {% endif %}
-        <hr>
-        {% endfor %}
-        {% if session.username %}
-        <form action="/topic/{{ topic[0] }}/send" method="POST">
-            Kirjoita viesti:<br>
-            <textarea name="content" rows="10" cols="80"></textarea><br>
-            <input type="submit" value="Lähetä">
-        </form>
-        {% else %}
-        <p>Kirjaudu sisään vastataksesi keskusteluun</p>
-        {% endif %}
-        <br>
-        <a href="/">Takaisin etusivulle</a>
-    </body>
-</html>
+{% extends "layout.html" %}
+{% block title %}{{ topic[1] }}{% endblock %}
+{% block content %}
+    {% if session.username %}
+    <p>Olet kirjautunut nimellä {{ session.username }}</p>
+    <a href="/logout">Kirjaudu ulos</a>
+    {% endif %}
+    <h2>{{ topic[1] }}</h2>
+    <hr>
+    {% for message in messages %}
+    {% if message[0] == 0 %}
+    <p><em>Viesti poistettu</em></p>
+    {% else %}
+    <p>
+    {{ message[2] }}<br>
+    <br>
+    Lähettäjä: {{ message[1] }}<br>
+    Lähetetty: {{ message[3].strftime("%Y-%m-%d %H:%M:%S") }}<br>
+    {% if user_id == message[4] %}
+    <form action="/{{ topic[0] }}/deletemessage/{{ message[5] }}" method="POST">
+        <input type="submit" value="Poista">
+    </form>
+    {% endif %}
+    </p>
+    {% endif %}
+    <hr>
+    {% endfor %}
+    {% if session.username %}
+    <form action="/topic/{{ topic[0] }}/send" method="POST">
+        Kirjoita viesti:<br>
+        <textarea name="content" rows="10" cols="80"></textarea><br>
+        <input type="submit" value="Lähetä">
+    </form>
+    {% else %}
+    <p>Kirjaudu sisään vastataksesi keskusteluun</p>
+    {% endif %}
+    <br>
+    <a href="/">Takaisin etusivulle</a>
+{% endblock %}
