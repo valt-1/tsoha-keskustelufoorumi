@@ -8,16 +8,21 @@
         <h2>{{ topic[1] }}</h2>
         <hr>
         {% for message in messages %}
-            <p>{{ message[1] }}</p>
-            <p>
-                Lähetetty: {{ message[2].strftime("%Y-%m-%d %H:%M:%S") }}
-                {% if user_id == message[5] %}
-                <form action="/{{ topic[0] }}/deletemessage/{{ message[0] }}" method="POST">
-                    <input type="submit" value="Poista">
-                </form>
-                {% endif %}
-            </p>
-            <hr>
+        {% if message[0] == 0 %}
+        <p><em>Viesti poistettu</em></p>
+        {% else %}
+        <p>
+            <p>{{ message[2] }}</p>
+            Lähettäjä: {{ message[1] }}<br>
+            Lähetetty: {{ message[3].strftime("%Y-%m-%d %H:%M:%S") }}<br>
+            {% if user_id == message[4] %}
+            <form action="/{{ topic[0] }}/deletemessage/{{ message[5] }}" method="POST">
+                <input type="submit" value="Poista">
+            </form>
+            {% endif %}
+        </p>
+        {% endif %}
+        <hr>
         {% endfor %}
         {% if session.username %}
         <form action="/topic/{{ topic[0] }}/send" method="POST">

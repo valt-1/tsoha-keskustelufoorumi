@@ -7,8 +7,8 @@ def send(content, topic_id, user_id):
     db.session.commit()
 
 def remove(message_id):
-    sql = "UPDATE messages SET visible=0 WHERE id=:id"
-    db.session.execute(sql, {"id":message_id})
+    sql = "UPDATE messages SET visible=0 WHERE id=:message_id"
+    db.session.execute(sql, {"message_id":message_id})
     db.session.commit()
 
 def find_all():
@@ -17,7 +17,10 @@ def find_all():
     return messages
 
 def find_by_topic(topic_id):
-    sql = "SELECT * FROM messages WHERE topic_id=:topic_id AND visible=1"
+    sql = """SELECT M.visible, U.username, M.content, M.sent_at, M.user_id, M.id
+             FROM messages M, users U
+             WHERE topic_id=:topic_id AND M.user_id=U.id
+             ORDER BY M.id"""
     result = db.session.execute(sql, {"topic_id":topic_id})
     return result.fetchall()
 
