@@ -17,7 +17,7 @@ hakea esimerkiksi viestin sisällön tai lähettäjän perusteella.
 [Sovellus Herokussa](https://peaceful-castle-52118.herokuapp.com/)
 
 Toteutettu:
+- käyttäjätunnuksen luominen ja kirjautuminen
 - uuden viestiketjun aloittaminen
 - viestin lisääminen keskusteluun
 - mahdollisuus poistaa viesti
-    - ei vielä toimi kovin järkevästi kun ei ole käyttäjätunnuksia, nyt voi poistaa kenen tahansa viestejä
