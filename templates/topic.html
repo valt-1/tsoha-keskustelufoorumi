@@ -26,6 +26,15 @@
     <hr>
     {% endfor %}
     {% if session.username %}
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    <ul class=flashes>
+    {% for message in messages %}
+        <li>{{ message }}</li>
+    {% endfor %}
+    </ul>
+    {% endif %}
+    {% endwith %}
     <form action="/topic/{{ topic[0] }}/send" method="POST">
         Kirjoita viesti:<br>
         <textarea name="content" rows="10" cols="80"></textarea><br>

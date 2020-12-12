@@ -6,6 +6,15 @@
     <a href="/logout">Kirjaudu ulos</a>
     {% endif %}
     <h2>Uusi aihe</h2>
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    <ul class=flashes>
+    {% for message in messages %}
+        <li>{{ message }}</li>
+    {% endfor %}
+    </ul>
+    {% endif %}
+    {% endwith %}
     <form action="/createtopic" method="POST">
         Otsikko:<br>
         <textarea name="subject" rows="1" cols="80"></textarea><br>

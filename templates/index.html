@@ -5,6 +5,15 @@
     <p>Olet kirjautunut nimellä {{ session.username }}</p>
     <a href="/logout">Kirjaudu ulos</a>
     {% else %}
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    <ul class=flashes>
+    {% for message in messages %}
+        <li>{{ message }}</li>
+    {% endfor %}
+    </ul>
+    {% endif %}
+    {% endwith %}
     <form action="/login" method="POST">
         Käyttäjätunnus: <input type="text" name="username">
         Salasana: <input type="password" name="password">
