@@ -130,20 +130,57 @@ def send_message(topic_id):
     messages.send(content, topic_id, user_id)
     return redirect("/topic/" + str(topic_id))
 
+@app.route("/editmessage/<int:message_id>", methods=["GET"])
+def edit_message(message_id):
+    allow = check_if_allowed(message_id)
+
+    if not allow:
+        return render_template("error.html",
+                               error="""Vain kirjautuneet käyttäjät
+                               voivat muokata omia viestejään""")
+
+    content = messages.get_content(message_id)
+    return render_template("editmessage.html",
+                           content=content, message_id=message_id)
+
+@app.route("/updatemessage/<int:message_id>", methods=["POST"])
+def update_message(message_id):
+    allow = check_if_allowed(message_id)
+
+    if not allow:
+        return render_template("error.html",
+                               error="""Vain kirjautuneet käyttäjät
+                               voivat muokata omia viestejään""")
+
+    content = request.form["content"]
+    error = check_message_errors(content)
+    if error:
+        flash(error)
+        return redirect("/editmessage/" + str(message_id))
+
+    messages.update(message_id, content)
+    topic_id = messages.get_topic_id(message_id)
+    return redirect("/topic/" + str(topic_id))
+
 @app.route("/<int:topic_id>/deletemessage/<int:message_id>", methods=["POST"])
 def delete_message(topic_id, message_id):
-    allow = False
-    user_id = users.find_by_username(session.get("username"))[0]
-    if user_id == messages.find_sender_id(message_id):
-        allow = True
+    allow = check_if_allowed(message_id)
 
     if not allow:
         return render_template("error.html",
                                error="""Vain kirjautuneet käyttäjät
                                voivat poistaa omia viestejään""")
 
-    messages.remove(message_id)
+    messages.delete(message_id)
     return redirect("/topic/"+str(topic_id))
+
+def check_if_allowed(message_id):
+    allow = False
+    user_id = users.find_by_username(session.get("username"))[0]
+    if user_id == messages.get_sender_id(message_id):
+        allow = True
+
+    return allow
 
 def check_subject_errors(subject):
     if len(subject) < 3:

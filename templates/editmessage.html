@@ -1,0 +1,25 @@
+{% extends "layout.html" %}
+{% block title %}Muokkaa viestiä{% endblock %}
+{% block content %}
+    {% if session.username %}
+    <p>Olet kirjautunut nimellä {{ session.username }}</p>
+    <a href="/logout">Kirjaudu ulos</a>
+    {% endif %}
+    <h2>Muokkaa viestiä</h2>
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    <ul class=flashes>
+    {% for message in messages %}
+        <li>{{ message }}</li>
+    {% endfor %}
+    </ul>
+    {% endif %}
+    {% endwith %}
+    <form action="/updatemessage/{{ message_id }}" method="POST">
+        Kirjoita viesti:<br>
+        <textarea name="content" rows="10" cols="80">{{ content }}</textarea><br>
+        <input type="submit" value="Lähetä">
+    </form>
+    <br>
+    <a href="/">Takaisin etusivulle</a>
+{% endblock %}

@@ -17,6 +17,9 @@
     Lähettäjä: {{ message[1] }}<br>
     Lähetetty: {{ message[3].strftime("%Y-%m-%d %H:%M:%S") }}<br>
     {% if user_id == message[4] %}
+    <form action="/editmessage/{{ message[5] }}" method="GET">
+        <input type="submit" value="Muokkaa">
+    </form>
     <form action="/{{ topic[0] }}/deletemessage/{{ message[5] }}" method="POST">
         <input type="submit" value="Poista">
     </form>
