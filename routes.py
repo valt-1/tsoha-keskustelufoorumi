@@ -21,10 +21,11 @@ def login():
     if users.find_by_username(username) is None:
         flash("Virheellinen käyttäjätunnus")
     else:
-        hash_value = users.find_password(username)
+        hash_value = users.get_password(username)
         if check_password_hash(hash_value, password):
             session["logged_in"] = True
             session["username"] = username
+            session["user_role"] = users.get_user_role(username)
             return redirect("/")
         else:
             flash("Virheellinen salasana")
@@ -177,8 +178,10 @@ def delete_message(topic_id, message_id):
 
 def check_if_allowed(message_id):
     allow = False
-    user_id = users.find_by_username(session.get("username"))[0]
-    if user_id == messages.get_sender_id(message_id):
+    user = users.find_by_username(session.get("username"))
+    user_id = user[0]
+    user_role = session.get("user_role")
+    if user_id == messages.get_sender_id(message_id) or user_role == "admin":
         allow = True
 
     return allow

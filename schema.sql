@@ -1,7 +1,8 @@
 CREATE TABLE users (
     id SERIAL PRIMARY KEY,
     username TEXT UNIQUE,
-    password TEXT
+    password TEXT,
+    user_role TEXT
 );
 CREATE TABLE topics (
     id SERIAL PRIMARY KEY,
