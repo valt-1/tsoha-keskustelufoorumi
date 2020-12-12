@@ -29,7 +29,8 @@ def login():
         else:
             flash("Virheellinen salasana")
 
-    return render_template("index.html")
+    topic_list = topics.find_all()
+    return render_template("index.html", topics=topic_list)
 
 @app.route("/logout")
 def logout():
