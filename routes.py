@@ -1,7 +1,6 @@
 from os import getenv, urandom
-from flask import flash, redirect, render_template, request, session
+from flask import abort, flash, redirect, render_template, request, session
 from werkzeug.security import check_password_hash, generate_password_hash
-from werkzeug.exceptions import abort
 from app import app
 import messages
 import topics
