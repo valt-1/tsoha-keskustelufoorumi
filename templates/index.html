@@ -15,7 +15,16 @@
     {% for subforum in subforums %}
     <div class="card my-2">
         <div class="card-body">
-          <a class="card-title" href="/subforum/{{ subforum[0] }}">{{ subforum[1] }}</a>
+            <a class="card-title" href="/subforum/{{ subforum[0] }}">{{ subforum[1] }}</a>
+        </div>
+    </div>
+    {% endfor %}
+
+    <h3>Uusimmat aiheet</h3>
+    {% for topic in newest_topics %}
+    <div class="card my-2">
+        <div class="card-body">
+            <a class="card-title" href="/topic/{{ topic[0] }}">{{ topic[1] }}</a>
         </div>
     </div>
     {% endfor %}

@@ -12,7 +12,8 @@ app.secret_key = getenv("SECRET_KEY")
 @app.route("/")
 def index():
     subforum_list = subforums.find_all()
-    return render_template("index.html", subforums=subforum_list)
+    newest_topics = topics.find_newest(3)
+    return render_template("index.html", subforums=subforum_list, newest_topics=newest_topics)
 
 @app.route("/login", methods=["POST"])
 def login():

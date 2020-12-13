@@ -30,3 +30,8 @@ def find_by_id(topic_id):
     sql = "SELECT * FROM topics WHERE id=:id"
     result = db.session.execute(sql, {"id":topic_id})
     return result.fetchone()
+
+def find_newest(count):
+    sql = "SELECT * FROM topics ORDER BY id DESC LIMIT :count"
+    result = db.session.execute(sql, {"count":count})
+    return result.fetchall()
