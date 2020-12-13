@@ -1,6 +1,7 @@
 {% extends "layout.html" %}
 {% block title %}Muokkaa viestiä{% endblock %}
 {% block content %}
+    <a href="#" onclick="history.go(-1)">Takaisin</a>
     <h2>Muokkaa viestiä</h2>
     {% with messages = get_flashed_messages() %}
     {% if messages %}

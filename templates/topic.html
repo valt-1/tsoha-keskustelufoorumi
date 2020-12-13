@@ -1,6 +1,7 @@
 {% extends "layout.html" %}
 {% block title %}{{ topic[1] }}{% endblock %}
 {% block content %}
+    <a href="#" onclick="history.go(-1)">Takaisin</a>
     <h2>{{ topic[1] }}</h2>
     {% if session.user_role == "admin" %}
     <form action="/deletetopic/{{ topic[0] }}" method="POST">
@@ -49,7 +50,7 @@
     {% endwith %}
     <div class="form-group">
         <form action="/topic/{{ topic[0] }}/send" method="POST" id="newmessage">
-            <label for="message">Kirjoita viesti:</label>
+            <label for="message">Vastaa keskusteluun:</label>
             <textarea class="form-control" id="message" name="content" rows="10"></textarea>
             <input class="btn btn-light btn-sm mr-sm-2" type="submit" value="Lähetä">
             <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
