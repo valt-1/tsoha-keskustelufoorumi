@@ -18,6 +18,7 @@ sovelluksella on ylläpitäjinä toimivia käyttäjiä, jotka voivat poistaa
 ja muokata kaikkia viestejä. Ylläpitäjä voi myös poistaa kokonaisia 
 viestiketjuja.
 
+Sovelluksen etusivulla näkyy aihealueet ja uusimmat aloitetut viestiketjut.
 Viestiketjuja voi selailla aihealueiden mukaan. Lisäksi sovelluksessa on 
 hakutoiminto, joka löytää kaikki viestit joiden sisällössä tai lähettäjän 
 nimessä esiintyy haettu merkkijono.
