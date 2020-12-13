@@ -37,6 +37,7 @@ def login():
 def logout():
     session.pop("logged_in", None)
     del session["username"]
+    del session["user_role"]
     return redirect("/")
 
 @app.route("/signup")
@@ -100,6 +101,14 @@ def create_topic():
 
     user_id = users.find_by_username(session.get("username"))[0]
     topics.create(subject, message, user_id)
+    return redirect("/")
+
+@app.route("/deletetopic/<int:topic_id>", methods=["POST"])
+def delete_topic(topic_id):
+    if session.get("user_role") != "admin":
+        return render_template("error.html")
+
+    topics.delete(topic_id)
     return redirect("/")
 
 @app.route("/topic/<int:topic_id>")
