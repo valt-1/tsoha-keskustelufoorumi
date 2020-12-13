@@ -28,12 +28,10 @@ def login():
             session["username"] = username
             session["user_role"] = users.get_user_role(username)
             session["csrf_token"] = urandom(16).hex()
-            return redirect(request.referrer)
         else:
             flash("Virheellinen salasana")
 
-    subforum_list = subforums.find_all()
-    return render_template("index.html", subforums=subforum_list)
+    return redirect(request.referrer)
 
 @app.route("/logout")
 def logout():
