@@ -31,9 +31,9 @@ def find_by_topic(topic_id):
 
 def find_by_keyword(keyword):
     keyword = "%" + keyword + "%"
-    sql = """SELECT M.visible, U.username, M.content, M.sent_at, M.user_id, M.id, M.topic_id
-             FROM messages M, users U
-             WHERE M.user_id=U.id
+    sql = """SELECT M.visible, U.username, M.content, M.sent_at, M.user_id, M.id, M.topic_id, T.subject
+             FROM messages M, users U, topics T
+             WHERE M.user_id=U.id AND M.topic_id=T.id
              AND (U.username LIKE :keyword OR M.content LIKE :keyword)
              ORDER BY id DESC"""
     result = db.session.execute(sql, {"keyword":keyword})

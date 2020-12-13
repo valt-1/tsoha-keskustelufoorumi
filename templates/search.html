@@ -15,6 +15,9 @@
     <br>
     Lähettäjä: {{ message[1] }}<br>
     Lähetetty: {{ message[3].strftime("%Y-%m-%d %H:%M:%S") }}<br>
+    Kuuluu keskusteluun
+    <a href="/topic/{{ message[6] }}">{{ message[7] }}</a>
+    <br>
     {% if user_id == message[4] or session.user_role == "admin" %}
     <form action="/editmessage/{{ message[5] }}" method="GET">
         <input type="submit" value="Muokkaa">
@@ -26,7 +29,6 @@
         <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
     </form>
     {% endif %}
-    <a href="/topic/{{ message[6] }}">Näytä keskustelu</a>
     </p>
     <hr>
     {% endfor %}
