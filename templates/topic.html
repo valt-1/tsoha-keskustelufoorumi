@@ -8,16 +8,11 @@
     <h2>{{ topic[1] }}</h2>
     {% if session.user_role == "admin" %}
     <form action="/deletetopic/{{ topic[0] }}" method="POST">
-        <input type="button" onClick="confDeleteTopic(this.form)" value="Poista keskustelu">
+        <input type="button"
+        onClick="confSubmit(this.form, 'Haluatko varmasti poistaa keskustelun lopullisesti?')"
+        value="Poista keskustelu">
         <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
     </form>
-    <script type="text/javascript">
-        function confDeleteTopic(form) {
-            if (confirm("Haluatko varmasti poistaa keskustelun lopullisesti?")) {
-                form.submit();
-            }
-        }
-    </script>
     {% endif %}
     <hr>
     {% for message in messages %}
@@ -34,7 +29,9 @@
         <input type="submit" value="Muokkaa">
     </form>
     <form action="/{{ topic[0] }}/deletemessage/{{ message[5] }}" method="POST">
-        <input type="submit" value="Poista">
+        <input type="button"
+        onClick="confSubmit(this.form, 'Haluatko varmasti poistaa viestin?')"
+        value="Poista">
         <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
     </form>
     {% endif %}
@@ -63,4 +60,11 @@
     {% endif %}
     <br>
     <a href="/">Takaisin etusivulle</a>
+    <script type="text/javascript">
+        function confSubmit(form, message) {
+            if (confirm(message)) {
+                form.submit();
+            }
+        }
+    </script>
 {% endblock %}
