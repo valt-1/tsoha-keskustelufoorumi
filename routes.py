@@ -43,7 +43,7 @@ def logout():
     del session["csrf_token"]
 
     flash("Kirjauduit ulos")
-    return redirect("/")
+    return redirect(request.referrer)
 
 @app.route("/signup")
 def signup():
