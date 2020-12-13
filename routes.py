@@ -89,14 +89,14 @@ def create_topic():
     subject = request.form["subject"]
     message = request.form["content"]
 
-    error = check_subject_errors(subject)
-    if error:
-        flash(error)
-    error = check_message_errors(message)
-    if error:
-        flash(error)
+    subject_error = check_subject_errors(subject)
+    if subject_error:
+        flash(subject_error)
+    message_error = check_message_errors(message)
+    if message_error:
+        flash(message_error)
 
-    if error:
+    if subject_error or message_error:
         return render_template("newtopic.html")
 
     user_id = users.find_by_username(session.get("username"))[0]
