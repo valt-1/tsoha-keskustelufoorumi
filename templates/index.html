@@ -13,7 +13,10 @@
     <br>
     <h2>Keskustelualueet</h2>
     {% for subforum in subforums %}
-    <a href="/subforum/{{ subforum[0] }}">{{ subforum[1] }}</a>
-    <hr>
+    <div class="card my-2">
+        <div class="card-body">
+          <a class="card-title" href="/subforum/{{ subforum[0] }}">{{ subforum[1] }}</a>
+        </div>
+    </div>
     {% endfor %}
 {% endblock %}
