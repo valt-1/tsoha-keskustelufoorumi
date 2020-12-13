@@ -128,7 +128,7 @@ def create_topic(subforum_id):
 
     user_id = users.find_by_username(session.get("username"))[0]
     topics.create(subject, message, user_id, subforum_id)
-    return redirect("/")
+    return redirect("/subforum/" + str(subforum_id))
 
 @app.route("/deletetopic/<int:topic_id>", methods=["POST"])
 def delete_topic(topic_id):
