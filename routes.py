@@ -168,7 +168,7 @@ def send_message(topic_id):
     error = check_message(content)
     if error:
         flash(error)
-        return redirect("/topic/" + str(topic_id))
+        return redirect("/topic/" + str(topic_id) + "#newmessage")
 
     user_id = users.find_by_username(session.get("username"))[0]
     messages.create(content, topic_id, user_id)

@@ -49,7 +49,7 @@
     </ul>
     {% endif %}
     {% endwith %}
-    <form action="/topic/{{ topic[0] }}/send" method="POST">
+    <form action="/topic/{{ topic[0] }}/send" method="POST" id="newmessage">
         Kirjoita viesti:<br>
         <textarea name="content" rows="10" cols="80"></textarea><br>
         <input type="submit" value="Lähetä">
