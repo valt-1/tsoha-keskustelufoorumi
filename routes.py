@@ -3,6 +3,7 @@ from flask import abort, flash, redirect, render_template, request, session
 from werkzeug.security import check_password_hash, generate_password_hash
 from app import app
 import messages
+import subforums
 import topics
 import users
 
@@ -10,8 +11,8 @@ app.secret_key = getenv("SECRET_KEY")
 
 @app.route("/")
 def index():
-    topic_list = topics.find_all()
-    return render_template("index.html", topics=topic_list)
+    subforum_list = subforums.find_all()
+    return render_template("index.html", subforums=subforum_list)
 
 @app.route("/login", methods=["POST"])
 def login():
@@ -90,15 +91,21 @@ def search_for():
     message_list = messages.find_by_keyword(keyword)
     return render_template("search.html", messages=message_list)
 
-@app.route("/newtopic")
-def new_topic():
+@app.route("/subforum/<int:subforum_id>")
+def subforum(subforum_id):
+    subforum = subforums.find_by_id(subforum_id)
+    topic_list = topics.find_by_subforum(subforum_id)
+    return render_template("/subforum.html", subforum=subforum, topics=topic_list)
+
+@app.route("/subforum/<subforum_id>/newtopic")
+def new_topic(subforum_id):
     if not session.get("logged_in"):
         return render_template("error.html",
                                error="Kirjaudu sisään luodaksesi uuden aiheen")
-    return render_template("newtopic.html")
+    return render_template("newtopic.html", subforum_id=subforum_id)
 
-@app.route("/createtopic", methods=["POST"])
-def create_topic():
+@app.route("/subforum/<subforum_id>/createtopic", methods=["POST"])
+def create_topic(subforum_id):
     if not session.get("logged_in"):
         return render_template("error.html",
                                error="Kirjaudu sisään luodaksesi uuden aiheen")
@@ -120,7 +127,7 @@ def create_topic():
         return render_template("newtopic.html")
 
     user_id = users.find_by_username(session.get("username"))[0]
-    topics.create(subject, message, user_id)
+    topics.create(subject, message, user_id, subforum_id)
     return redirect("/")
 
 @app.route("/deletetopic/<int:topic_id>", methods=["POST"])
@@ -135,7 +142,7 @@ def delete_topic(topic_id):
     return redirect("/")
 
 @app.route("/topic/<int:topic_id>")
-def show_topic(topic_id):
+def topic(topic_id):
     topic = topics.find_by_id(topic_id)
     message_list = messages.find_by_topic(topic_id)
 
@@ -164,7 +171,7 @@ def send_message(topic_id):
         return redirect("/topic/" + str(topic_id))
 
     user_id = users.find_by_username(session.get("username"))[0]
-    messages.send(content, topic_id, user_id)
+    messages.create(content, topic_id, user_id)
     return redirect("/topic/" + str(topic_id))
 
 @app.route("/editmessage/<int:message_id>", methods=["GET"])

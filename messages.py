@@ -1,6 +1,6 @@
 from db import db
 
-def send(content, topic_id, user_id):
+def create(content, topic_id, user_id):
     sql = """INSERT INTO messages (content, sent_at, visible, topic_id, user_id)
              VALUES (:content, NOW(), 1, :topic_id, :user_id)"""
     db.session.execute(sql, {"content":content, "topic_id":topic_id, "user_id":user_id})
@@ -18,8 +18,7 @@ def update(message_id, content):
 
 def find_all():
     result = db.session.execute("SELECT * FROM messages")
-    messages = result.fetchall()
-    return messages
+    return result.fetchall()
 
 def find_by_topic(topic_id):
     sql = """SELECT M.visible, U.username, M.content, M.sent_at, M.user_id, M.id

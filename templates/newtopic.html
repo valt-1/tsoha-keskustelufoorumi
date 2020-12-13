@@ -15,7 +15,7 @@
     </ul>
     {% endif %}
     {% endwith %}
-    <form action="/createtopic" method="POST">
+    <form action="/subforum/{{ subforum_id }}/createtopic" method="POST">
         Otsikko:<br>
         <textarea name="subject" rows="1" cols="80"></textarea><br>
         Kirjoita viesti:<br>

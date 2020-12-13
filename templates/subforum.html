@@ -1,0 +1,16 @@
+{% extends "layout.html" %}
+{% block title %}{{ subforum[1] }}{% endblock %}
+{% block content %}
+    <a href="/search">Haku</a>
+    <h2>{{ subforum[1] }}</h2>
+    <h3>Keskustelut</h3>
+    {% for topic in topics %}
+    <a href="/topic/{{ topic[0] }}">{{ topic[1] }}</a>
+    <hr>
+    {% endfor %}
+    {% if session.username %}
+    <a href="/subforum/{{ subforum[0] }}/newtopic">Uusi aihe</a>
+    {% else %}
+    <p>Kirjaudu sisään luodaksesi uuden aiheen</p>
+    {% endif %}
+{% endblock %}
