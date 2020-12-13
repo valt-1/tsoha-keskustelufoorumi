@@ -29,6 +29,16 @@ def find_by_topic(topic_id):
     result = db.session.execute(sql, {"topic_id":topic_id})
     return result.fetchall()
 
+def find_by_keyword(keyword):
+    keyword = "%" + keyword + "%"
+    sql = """SELECT M.visible, U.username, M.content, M.sent_at, M.user_id, M.id, M.topic_id
+             FROM messages M, users U
+             WHERE M.user_id=U.id
+             AND (U.username LIKE :keyword OR M.content LIKE :keyword)
+             ORDER BY id DESC"""
+    result = db.session.execute(sql, {"keyword":keyword})
+    return result.fetchall()
+
 def get_sender_id(message_id):
     sql = "SELECT user_id FROM messages WHERE id=:message_id"
     result = db.session.execute(sql, {"message_id":message_id})

@@ -1,0 +1,35 @@
+{% extends "layout.html" %}
+{% block title %}Haku{% endblock %}
+{% block content %}
+    {% if session.username %}
+    <p>Olet kirjautunut nimellä {{ session.username }}</p>
+    <a href="/logout">Kirjaudu ulos</a>
+    {% endif %}
+    <form action="/search" method="POST">
+        <input type="text" name="search">
+        <input type="submit" value="Hae">
+    </form>
+    {% for message in messages if message[0] != 0%}
+    <p>
+    {{ message[2] }}<br>
+    <br>
+    Lähettäjä: {{ message[1] }}<br>
+    Lähetetty: {{ message[3].strftime("%Y-%m-%d %H:%M:%S") }}<br>
+    {% if user_id == message[4] or session.user_role == "admin" %}
+    <form action="/editmessage/{{ message[5] }}" method="GET">
+        <input type="submit" value="Muokkaa">
+    </form>
+    <form action="/{{ message[6] }}/deletemessage/{{ message[5] }}" method="POST">
+        <input type="button"
+        onClick="confSubmit(this.form, 'Haluatko varmasti poistaa viestin?')"
+        value="Poista">
+        <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+    </form>
+    {% endif %}
+    <a href="/topic/{{ message[6] }}">Näytä keskustelu</a>
+    </p>
+    <hr>
+    {% endfor %}
+    <a href="/">Takaisin etusivulle</a>
+    <script src="{{url_for('static', filename='script.js')}}"></script>
+{% endblock %}

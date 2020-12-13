@@ -80,6 +80,16 @@ def new_user():
     session["csrf_token"] = urandom(16).hex()
     return redirect("/")
 
+@app.route("/search", methods=["GET"])
+def search():
+    return render_template("search.html")
+
+@app.route("/search", methods=["POST"])
+def search_for():
+    keyword = request.form["search"]
+    message_list = messages.find_by_keyword(keyword)
+    return render_template("search.html", messages=message_list)
+
 @app.route("/newtopic")
 def new_topic():
     if not session.get("logged_in"):

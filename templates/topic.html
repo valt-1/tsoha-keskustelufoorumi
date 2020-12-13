@@ -60,11 +60,5 @@
     {% endif %}
     <br>
     <a href="/">Takaisin etusivulle</a>
-    <script type="text/javascript">
-        function confSubmit(form, message) {
-            if (confirm(message)) {
-                form.submit();
-            }
-        }
-    </script>
+    <script src="{{url_for('static', filename='script.js')}}"></script>
 {% endblock %}
