@@ -71,6 +71,10 @@ def new_user():
 
     hash_value = generate_password_hash(password)
     users.create(username, hash_value)
+
+    session["logged_in"] = True
+    session["username"] = username
+    session["user_role"] = users.get_user_role(username)
     return redirect("/")
 
 @app.route("/newtopic")
