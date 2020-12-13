@@ -1,0 +1,12 @@
+.jumbotron {
+  background-image: url("catdog.jpg");
+  background-size: cover;
+}
+
+body {
+  background: #e8ddf2;
+}
+
+.navbar-dark .navbar-nav .nav-link.disabled {
+  color: rgba(255,255,255,.5);
+}

@@ -3,10 +3,68 @@
 <head>
     <title>Tsoha Forum - {% block title %}{% endblock %}</title>
     <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url_for('static',filename='custom.css') }}">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </head>
 <body>
-    <h1>Tsoha Forum</h1>
-    <a href="/">Etusivulle</a>
-    {% block content %}{% endblock %}
+    <header>
+        <div class="jumbotron text-center" style="margin-bottom:0">
+            <h1>Tsoha Forum</h1>
+            <p>Sitä hyvää sisältöä</p>
+        </div>
+    </header>
+
+    <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="collapsibleNavbar">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/">Etusivu</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/search">Haku</a>
+                </li>
+            </ul>
+        </div>
+        <div class="navbar-collapse collapse w-100 order-3 dual-collapse2" id="collapsibleNavbar">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    {% if session.username %}
+                    <form class="form-inline my-2 my-lg-0" action="/logout">
+                        <a class="nav-link disabled" href="#">Olet kirjautunut nimellä {{ session.username }}</a>
+                        <button class="btn btn-light my-2 my-sm-0" type="submit">Kirjaudu ulos</button>
+                    </form>
+                    {% else %}
+                    <form class="form-inline my-2 my-lg-0" action="/login" method="POST">
+                        <input class="form-control form-control-sm mr-sm-2" type="text" name="username" placeholder="Käyttäjätunnus">
+                        <input class="form-control form-control-sm mr-sm-2" type="password" name="password" placeholder="Salasana">
+                        <button class="btn btn-light btn-sm mr-sm-2" type="submit">Kirjaudu</button>
+                    </form>
+                    {% endif %}
+                </li>
+                {% if not session.username %}
+                    <li class="nav-item">
+                        <a class="btn btn-light btn-sm my-2 my-lg-0" href="/signup" role="button">Uusi käyttäjä</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+    </nav>
+
+    <main>
+        <div class="container" style="margin-top:30px">
+            {% block content %}{% endblock %}
+        </div>
+    </main>
+    <footer>
+        <div class="jumbotron text-center" style="margin-bottom:0">
+        </div>
+    </footer>
 </body>
 </html>
