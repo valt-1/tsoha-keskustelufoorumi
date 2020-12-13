@@ -1,6 +1,7 @@
-from os import getenv
+from os import getenv, urandom
 from flask import flash, redirect, render_template, request, session
 from werkzeug.security import check_password_hash, generate_password_hash
+from werkzeug.exceptions import abort
 from app import app
 import messages
 import topics
@@ -26,6 +27,7 @@ def login():
             session["logged_in"] = True
             session["username"] = username
             session["user_role"] = users.get_user_role(username)
+            session["csrf_token"] = urandom(16).hex()
             return redirect("/")
         else:
             flash("Virheellinen salasana")
@@ -38,6 +40,7 @@ def logout():
     session.pop("logged_in", None)
     del session["username"]
     del session["user_role"]
+    del session["csrf_token"]
     return redirect("/")
 
 @app.route("/signup")
@@ -75,6 +78,7 @@ def new_user():
     session["logged_in"] = True
     session["username"] = username
     session["user_role"] = users.get_user_role(username)
+    session["csrf_token"] = urandom(16).hex()
     return redirect("/")
 
 @app.route("/newtopic")
@@ -90,13 +94,16 @@ def create_topic():
         return render_template("error.html",
                                error="Kirjaudu sisään luodaksesi uuden aiheen")
 
+    if session["csrf_token"] != request.form["csrf_token"]:
+        abort(403)
+
     subject = request.form["subject"]
     message = request.form["content"]
 
-    subject_error = check_subject_errors(subject)
+    subject_error = check_subject(subject)
     if subject_error:
         flash(subject_error)
-    message_error = check_message_errors(message)
+    message_error = check_message(message)
     if message_error:
         flash(message_error)
 
@@ -110,7 +117,10 @@ def create_topic():
 @app.route("/deletetopic/<int:topic_id>", methods=["POST"])
 def delete_topic(topic_id):
     if session.get("user_role") != "admin":
-        return render_template("error.html")
+        abort(403)
+
+    if session["csrf_token"] != request.form["csrf_token"]:
+        abort(403)
 
     topics.delete(topic_id)
     return redirect("/")
@@ -134,9 +144,12 @@ def send_message(topic_id):
         return render_template("error.html",
                                error="Kirjaudu sisään lähettääksesi viestin")
 
+    if session["csrf_token"] != request.form["csrf_token"]:
+        abort(403)
+
     content = request.form["content"]
 
-    error = check_message_errors(content)
+    error = check_message(content)
     if error:
         flash(error)
         return redirect("/topic/" + str(topic_id))
@@ -147,7 +160,7 @@ def send_message(topic_id):
 
 @app.route("/editmessage/<int:message_id>", methods=["GET"])
 def edit_message(message_id):
-    allow = check_if_allowed(message_id)
+    allow = check_user(message_id)
 
     if not allow:
         return render_template("error.html",
@@ -160,15 +173,18 @@ def edit_message(message_id):
 
 @app.route("/updatemessage/<int:message_id>", methods=["POST"])
 def update_message(message_id):
-    allow = check_if_allowed(message_id)
+    allow = check_user(message_id)
 
     if not allow:
         return render_template("error.html",
                                error="""Vain kirjautuneet käyttäjät
                                voivat muokata omia viestejään""")
 
+    if session["csrf_token"] != request.form["csrf_token"]:
+        abort(403)
+
     content = request.form["content"]
-    error = check_message_errors(content)
+    error = check_message(content)
     if error:
         flash(error)
         return redirect("/editmessage/" + str(message_id))
@@ -179,17 +195,20 @@ def update_message(message_id):
 
 @app.route("/<int:topic_id>/deletemessage/<int:message_id>", methods=["POST"])
 def delete_message(topic_id, message_id):
-    allow = check_if_allowed(message_id)
+    allow = check_user(message_id)
 
     if not allow:
         return render_template("error.html",
                                error="""Vain kirjautuneet käyttäjät
                                voivat poistaa omia viestejään""")
 
+    if session["csrf_token"] != request.form["csrf_token"]:
+        abort(403)
+
     messages.delete(message_id)
     return redirect("/topic/"+str(topic_id))
 
-def check_if_allowed(message_id):
+def check_user(message_id):
     allow = False
     user = users.find_by_username(session.get("username"))
     user_id = user[0]
@@ -199,7 +218,7 @@ def check_if_allowed(message_id):
 
     return allow
 
-def check_subject_errors(subject):
+def check_subject(subject):
     if len(subject) < 3:
         return "Liian lyhyt otsikko. Otsikon pituuden tulee olla 3-100 merkkiä."
     if len(subject) > 100:
@@ -207,7 +226,7 @@ def check_subject_errors(subject):
 
     return None
 
-def check_message_errors(message):
+def check_message(message):
     if len(message) < 3:
         return "Liian lyhyt viesti. Viestin pituuden tulee olla 3-5000 merkkiä."
     if len(message) > 5000:
