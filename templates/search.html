@@ -1,37 +1,47 @@
 {% extends "layout.html" %}
 {% block title %}Haku{% endblock %}
 {% block content %}
-    {% if session.username %}
-    <p>Olet kirjautunut nimellä {{ session.username }}</p>
-    <a href="/logout">Kirjaudu ulos</a>
-    {% endif %}
-    <form action="/search" method="POST">
-        <input type="text" name="search">
-        <input type="submit" value="Hae">
-    </form>
-    {% for message in messages if message[0] != 0%}
-    <p>
-    {{ message[2] }}<br>
-    <br>
-    Lähettäjä: {{ message[1] }}<br>
-    Lähetetty: {{ message[3].strftime("%Y-%m-%d %H:%M:%S") }}<br>
-    Kuuluu keskusteluun
-    <a href="/topic/{{ message[6] }}">{{ message[7] }}</a>
-    <br>
-    {% if user_id == message[4] or session.user_role == "admin" %}
-    <form action="/editmessage/{{ message[5] }}" method="GET">
-        <input type="submit" value="Muokkaa">
-    </form>
-    <form action="/{{ message[6] }}/deletemessage/{{ message[5] }}" method="POST">
-        <input type="button"
-        onClick="confSubmit(this.form, 'Haluatko varmasti poistaa viestin?')"
-        value="Poista">
-        <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
-    </form>
-    {% endif %}
-    </p>
-    <hr>
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    <ul class=flashes>
+    {% for message in messages %}
+        <li>{{ message }}</li>
     {% endfor %}
-    <a href="/">Takaisin etusivulle</a>
+    </ul>
+    {% endif %}
+    {% endwith %}
+    <div class="form-group">
+        <form action="/search" method="POST">
+            <input class="form-control form-control-sm my-2 mr-sm-2" type="text" name="search" placeholder="Hakusana">
+            <button class="btn btn-light btn-sm mr-sm-2" type="submit">Hae</button>
+        </form>
+    </div>
+    {% for message in messages if message[0] != 0%}
+    <div class="card my-2">
+        <div class="card-body">
+          <h6 class="card-subtitle mb-2 text-muted">Lähettäjä: {{ message[1] }}</h6>
+          <br>
+          <p class="card-text">{{ message[2] }}</p>
+          <br>
+          <p class="card-text">{{ message[3].strftime("%Y-%m-%d %H:%M:%S") }}</p>
+          <a href="/topic/{{ message[6] }}" class="card-link">Kuuluu keskusteluun {{ message[7] }}</a>
+          {% if user_id == message[4] or session.user_role == "admin" %}
+          <div class="form-group">
+              <form action="/editmessage/{{ message[5] }}" method="GET">
+                  <button class="btn btn-light btn-sm mr-sm-2" type="submit">Muokkaa</button>
+              </form>
+          </div>
+          <div class="form-group">
+              <form action="/{{ message[6] }}/deletemessage/{{ message[5] }}" method="POST">
+                  <input class="btn btn-light btn-sm mr-sm-2" type="button"
+                  onClick="confSubmit(this.form, 'Haluatko varmasti poistaa viestin?')"
+                  value="Poista" role="button">
+                  <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+              </form>
+          </div>
+          {% endif %}
+        </div>
+    </div>
+    {% endfor %}
     <script src="{{url_for('static', filename='script.js')}}"></script>
 {% endblock %}

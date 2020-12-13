@@ -1,10 +1,6 @@
 {% extends "layout.html" %}
 {% block title %}Etusivu{% endblock %}
 {% block content %}
-    {% if session.username %}
-    <p>Olet kirjautunut nimellä {{ session.username }}</p>
-    <a href="/logout">Kirjaudu ulos</a>
-    {% else %}
     {% with messages = get_flashed_messages() %}
     {% if messages %}
     <ul class=flashes>
@@ -14,15 +10,7 @@
     </ul>
     {% endif %}
     {% endwith %}
-    <form action="/login" method="POST">
-        Käyttäjätunnus: <input type="text" name="username">
-        Salasana: <input type="password" name="password">
-        <input type="submit" value="Kirjaudu">
-    </form>
-    <a href="/signup">Uusi käyttäjä</a>
-    {% endif %}
     <br>
-    <a href="/search">Haku</a>
     <h2>Keskustelualueet</h2>
     {% for subforum in subforums %}
     <a href="/subforum/{{ subforum[0] }}">{{ subforum[1] }}</a>

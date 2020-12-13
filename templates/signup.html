@@ -11,15 +11,13 @@
     </ul>
     {% endif %}
     {% endwith %}
-    <form action="/signup" method="POST">
-        Käyttäjätunnus:<br>
-        <input type="text" name="username"><br>
-        Salasana:<br>
-        <input type="password" name="password"><br>
-        Salasana uudelleen:<br>
-        <input type="password" name="password_confirmation"><br>
-        <input type="submit" value="Luo käyttäjätunnus">
-    </form>
+    <div class="form-group col-6">
+        <form action="/signup" method="POST">
+            <input class="form-control form-control-sm my-2 mr-sm-2" type="text" name="username" placeholder="Käyttäjätunnus">
+            <input class="form-control form-control-sm my-2 mr-sm-2" type="password" name="password" placeholder="Salasana">
+            <input class="form-control form-control-sm my-2 mr-sm-2" type="password" name="password_confirmation" placeholder="Salasana uudelleen">
+            <button class="btn btn-light btn-sm mr-sm-2" type="submit">Luo käyttäjätunnus</button>
+        </form>
+    </div>
     <br>
-    <a href="/">Takaisin etusivulle</a>
 {% endblock %}

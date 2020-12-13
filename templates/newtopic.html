@@ -1,10 +1,6 @@
 {% extends "layout.html" %}
 {% block title %}Uusi Aihe{% endblock %}
 {% block content %}
-    {% if session.username %}
-    <p>Olet kirjautunut nimellä {{ session.username }}</p>
-    <a href="/logout">Kirjaudu ulos</a>
-    {% endif %}
     <h2>Uusi aihe</h2>
     {% with messages = get_flashed_messages() %}
     {% if messages %}
@@ -15,14 +11,14 @@
     </ul>
     {% endif %}
     {% endwith %}
-    <form action="/subforum/{{ subforum_id }}/createtopic" method="POST">
-        Otsikko:<br>
-        <textarea name="subject" rows="1" cols="80"></textarea><br>
-        Kirjoita viesti:<br>
-        <textarea name="content" rows="10" cols="80"></textarea><br>
-        <input type="submit" value="Lähetä">
-        <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
-    </form>
-    <br>
-    <a href="/">Takaisin etusivulle</a>
+    <div class="form-group">
+        <form action="/subforum/{{ subforum_id }}/createtopic" method="POST">
+            <label for="subject">Otsikko:</label>
+            <textarea class="form-control" id="subject" name="subject" rows="1"></textarea>
+            <label for="message">Kirjoita viesti:</label>
+            <textarea class="form-control" id="message" name="content" rows="10"></textarea>
+            <input class="btn btn-light btn-sm mr-sm-2" type="submit" value="Lähetä">
+            <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+        </form>
+    </div>
 {% endblock %}
