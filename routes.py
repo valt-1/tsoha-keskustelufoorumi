@@ -125,7 +125,7 @@ def create_topic(subforum_id):
         flash(message_error)
 
     if subject_error or message_error:
-        return render_template("newtopic.html")
+        return render_template("newtopic.html", subforum_id=subforum_id)
 
     user_id = users.find_by_username(session.get("username"))[0]
     topics.create(subject, message, user_id, subforum_id)
