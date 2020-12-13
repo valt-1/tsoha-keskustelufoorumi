@@ -160,7 +160,7 @@ def send_message(topic_id):
 
 @app.route("/editmessage/<int:message_id>", methods=["GET"])
 def edit_message(message_id):
-    allow = check_user(message_id)
+    allow = check_authorization(message_id)
 
     if not allow:
         return render_template("error.html",
@@ -173,7 +173,7 @@ def edit_message(message_id):
 
 @app.route("/updatemessage/<int:message_id>", methods=["POST"])
 def update_message(message_id):
-    allow = check_user(message_id)
+    allow = check_authorization(message_id)
 
     if not allow:
         return render_template("error.html",
@@ -195,7 +195,7 @@ def update_message(message_id):
 
 @app.route("/<int:topic_id>/deletemessage/<int:message_id>", methods=["POST"])
 def delete_message(topic_id, message_id):
-    allow = check_user(message_id)
+    allow = check_authorization(message_id)
 
     if not allow:
         return render_template("error.html",
@@ -208,7 +208,10 @@ def delete_message(topic_id, message_id):
     messages.delete(message_id)
     return redirect("/topic/"+str(topic_id))
 
-def check_user(message_id):
+def check_authorization(message_id):
+    if not session.get("logged_in"):
+        return False
+
     allow = False
     user = users.find_by_username(session.get("username"))
     user_id = user[0]
