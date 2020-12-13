@@ -6,6 +6,18 @@
     <a href="/logout">Kirjaudu ulos</a>
     {% endif %}
     <h2>{{ topic[1] }}</h2>
+    {% if session.user_role == "admin" %}
+    <form action="/deletetopic/{{ topic[0] }}" method="POST">
+        <input type="button" onClick="confSubmit(this.form)" value="Poista keskustelu">
+    </form>
+    <script type="text/javascript">
+        function confSubmit(form) {
+            if (confirm("Haluatko varmasti poistaa keskustelun lopullisesti?")) {
+                form.submit();
+            }
+        }
+    </script>
+    {% endif %}
     <hr>
     {% for message in messages %}
     {% if message[0] == 0 %}
@@ -16,7 +28,7 @@
     <br>
     Lähettäjä: {{ message[1] }}<br>
     Lähetetty: {{ message[3].strftime("%Y-%m-%d %H:%M:%S") }}<br>
-    {% if user_id == message[4] %}
+    {% if user_id == message[4] or session.user_role == "admin" %}
     <form action="/editmessage/{{ message[5] }}" method="GET">
         <input type="submit" value="Muokkaa">
     </form>
