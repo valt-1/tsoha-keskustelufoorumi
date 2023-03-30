@@ -1,6 +1,9 @@
-# Keskustelufoorumi
+# Message Board
 
-[Sovellus Herokussa](https://peaceful-castle-52118.herokuapp.com/)
+A message board web application, created as a project for the _database application / tietokantasovellus_
+ course at the University of Helsinki in autumn 2020. The message board includes basic functionalities for creating a new user, creating new discussions, replying to existing discussions, editing and deleting messages, and a simple search feature.
+
+## Keskustelufoorumi
 
 Sovellus on keskustelupalsta, joka on jaettu useaan eri aihealueeseen.
 Aihealueilla on viestiketjuja, jotka sisältävät käyttäjien lähettämiä
